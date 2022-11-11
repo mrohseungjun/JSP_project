@@ -68,8 +68,8 @@ public class MemberDAOImpl implements MemberDAO {
 			st = con.createStatement();
 			rs= st.executeQuery(sql);
 			while(rs.next()) {
-				MemberDTO ad = new MemberDTO();
-				ad.setName(rs.getString("name"));
+				MemberDTO ad = new MemberDTO(); 
+				ad.setName(rs.getString("name"));//html의 name값
 				ad.setUserid(rs.getString("userid"));
 				ad.setPwd(rs.getString("pwd"));
 				ad.setEmail(rs.getString("email"));
@@ -87,9 +87,28 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override //수정
 	public void memberUpade(MemberDTO member) {
-		// TODO Auto-generated method stub
+		Connection con = null;
+		PreparedStatement ps =null;
+		try {
+			con = getConnection();
+			String sql="update memberdb set name=?, pwd=?, admin=?, email=?, phone=? where userid=?";
+			ps= con.prepareStatement(sql);	
+			ps.setString(1,member.getName());
+			ps.setString(2,member.getPwd());
+			ps.setString(3,member.getAdmin());
+			ps.setString(4,member.getEmail());
+			ps.setString(5,member.getPhone());
+			ps.setString(6,member.getUserid());
+			ps.executeUpdate();
 		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, ps, ps, null);
+		}
 	}
+		
+
 
 	@Override //삭제
 	public void memberDelete(String userid) {
@@ -110,8 +129,30 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override // 상세보기
 	public MemberDTO fineById(String userid) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		MemberDTO dto = null;
+		try {
+			con=getConnection();
+			String sql = "select* from memberdb where userid = '"+userid+"'";
+			st = con.createStatement();
+			rs = st.executeQuery(sql);
+			if(rs.next()) {
+				dto = new MemberDTO();
+				dto.setName(rs.getString("name"));
+				dto.setUserid(rs.getString("userid"));
+				dto.setPwd(rs.getString("pwd"));
+				dto.setEmail(rs.getString("email"));
+				dto.setPhone(rs.getString("phone"));
+				dto.setAdmin(rs.getString("admin"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection(con, null, st, rs);
+		}
+		return dto;
 	}
 
 	@Override// 아이디 중복확인
@@ -140,14 +181,19 @@ public class MemberDAOImpl implements MemberDAO {
 		Connection con = null;
 		Statement st = null;
 		ResultSet rs = null;
-		int flag=0;//사용가능
+		int flag=-1;// 회원아님(-1) , 회원 성공(0), 비번 오류 (2)
+		
 		try{
 			con =getConnection();
-			String sql = "select * from memberdb where userid ='"+userid+"', pwd ='"+pwd+"'";
+			String sql = "select pwd,admin from memberdb where userid ='"+userid+"'";
 			st = con.createStatement();
 			rs = st.executeQuery(sql);
-			if(rs.next()) {
-				flag=1; //로그인안됨
+			if(rs.next()) {// 회원이거나 비번 오류
+				if(rs.getString("pwd").equals(pwd)) {//회원 검색된 아이디의 비밀번호의 equals 비밀번호
+					flag=rs.getInt("admin");
+				}else {//회원이지만 비번 오류
+					flag=2; //로그인안됨
+				}
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -155,7 +201,7 @@ public class MemberDAOImpl implements MemberDAO {
 		closeConnection(con, null, st, rs);
 	}
 		return  flag;
-	}
+	}//loginCheck
 
 	@Override// 회원수
 	public int getCount() {

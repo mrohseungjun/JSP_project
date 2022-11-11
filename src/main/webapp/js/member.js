@@ -16,7 +16,9 @@ $(document).ready(function(){
 			$("#pwd").focus();
 			return false;
 			}
+			
 			if($("#pwd").val()!=$('#pwd_check').val()){
+				alert("비밀번호를 일치하지 않습니다.");
 				$("#pwd_check").focus();
 				return false;
 			}
@@ -25,7 +27,7 @@ $(document).ready(function(){
 			$("#email").focus();
 			return false;
 			}
-		/*	alert("전화번호를 입려하세요");    패턴이 아니면 전화번호 입력 알림 출력
+		  /*alert("전화번호를 입려하세요");    패턴이 아니면 전화번호 입력 알림 출력
 			$("#phone").focus();
 			return false;
 			}*/
@@ -38,6 +40,7 @@ $(document).ready(function(){
 			$("#frm").submit()
 		
 	})//sendBtn
+	
 	/*"idCheckBtn" 클릭하면 팝업인 idCheckjsp 띄우기*/
 	$("#idChekBtn").click(function(){
 	    window.open("idCheck.jsp","","width=700 height=400" );

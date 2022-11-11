@@ -16,8 +16,11 @@
 </head>
 <body>
 <div class="container mt-3">
+<div align="right">
+<a href ="loginForm.jsp">로그인</a>
+</div>
   <h2>회원가입</h2>
-  <form action="memberInserPro.jsp" method="post" id="frm">
+  <form action="memberInserPro.jsp" method="post" id="frm"> <!-- js에서 타고 옴  -->
     <div class="form-group">
       <label for="name">Name:</label>
       <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">

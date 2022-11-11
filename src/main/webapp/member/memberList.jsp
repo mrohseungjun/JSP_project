@@ -15,18 +15,23 @@
 <title>Insert title here</title>
 </head>
 <script src="../js/member.js"></script>
-<body>
 <%
 	request.setCharacterEncoding("utf-8");
+	String sid= (String)session.getAttribute("sUserid");
 	MemberDAO dao = MemberDAOImpl.getInstance();
    ArrayList<MemberDTO>  jarr =dao.memberList();
    int count=dao.getCount();
    
 %>
+<body>
+
 <div class="container mt-5">
+ <div align="right">
+ <a href="memberView.jsp"><%=sid %>님 반갑습니다. 
+ /<a href="logout.jsp">로그아웃</a> 
+ </div>
 <!-- <div align="right"><a href="insert.jsp">추가하기</a></div> -->
 <h2>회원 리스트(<span id="cnSpan"><%=count %> </span>)</h2>
-
 <table class="table table-hover">
 		<thead>
 			<tr>

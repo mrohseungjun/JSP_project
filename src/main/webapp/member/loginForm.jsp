@@ -15,7 +15,7 @@ $(function(){
 	$("#loginBtn").click(function(){
 		if($("#userid").val()==""){
 		alert("아이디를 입력하세요");
-		$("#userid").focus();
+		$("#userid").focus(); 
 		return false;
 	}//userid
     if($("#pwd").val()==""){
@@ -28,11 +28,22 @@ $(function(){
 	    	type:"post",
 	    	url:"loginPro.jsp",
 	    	data:{
-	    		"userid" : $("#userid").val(),
-	    		 "pwd" : $("#pwd").val()
+	    		userid : $("#userid").val(),
+	    		 pwd : $("#pwd").val()
 	    	},
 	    success:function(resp){
+	    	if(resp.trim()==-1){
+	    		alert("회원이 아닙니다. 회원가입 하세요")
+	    	}else if(resp.trim()==0){
+	    		alert("일반회원로그인 성공") // 일반 회원이면 ==>memberViwe.jsp 관리자면 memberList.jsp로
+				$(location).attr("href","memberView.jsp")
+	    	}else if(resp.trim()==1){
+	    		alert("관리자 로그인 성공")
+	    		$(location).attr("href","memberList.jsp")
+	    	}else if(resp.trim()==2){
 	    	
+	    		alert("비밀번호가 틀립니다. 비밀 번호를 다시 확인하세요")
+	    	}
 	    },
 	    	error:function(e){
 	    		alert(e+"error")
@@ -46,6 +57,9 @@ $(function(){
 </head>
 <body>
 <div class="container mt-3">
+<div align="right">
+<a href ="memberForm.jsp">회원가입</a>
+</div>
   <h2>로그인</h2>
     <div class="form-group">
       <label for="userid">Name:</label>

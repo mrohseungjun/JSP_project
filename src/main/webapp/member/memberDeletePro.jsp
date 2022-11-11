@@ -10,9 +10,9 @@
     request.setCharacterEncoding("utf-8");
     MemberDAO dao = MemberDAOImpl.getInstance();
 	String userid = request.getParameter("userid");
-	dao.memberDelete(userid);
+	dao.memberDelete(userid); // 여기서 데이터는 삭제
 	
-	ArrayList<MemberDTO> arr = dao.memberList();
+	ArrayList<MemberDTO> arr = dao.memberList(); //여기서 삭제된 멤버 리스트를 가지고 옴
 	int count = dao.getCount();
 	//자바 ==> JSON
 	

@@ -11,6 +11,6 @@
 <%
 	MemberDAO dao = MemberDAOImpl.getInstance();
     dao.MemberInsert(mvo);
-    response.sendRedirect("memberList.jsp");
+    response.sendRedirect("loginForm.jsp");
     
 %>
